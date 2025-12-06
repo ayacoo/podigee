@@ -8,9 +8,7 @@
 
 ## 2 Usage
 
-### 2.1 PrerequisitesTBD
-
-### 2.2 Installation
+### 2.1 Installation
 
 #### Installation using Composer
 
@@ -22,7 +20,7 @@ Run the following command within your [Composer][1] based TYPO3 project:
 composer require ayacoo/podigee
 ```
 
-### 2.3 TypoScript settings
+### 2.2 TypoScript settings
 
 #### Privacy
 
