@@ -7,8 +7,6 @@ namespace Ayacoo\Podigee\Rendering;
 use Ayacoo\Podigee\Event\ModifyPodigeeOutputEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Resource\Exception\InvalidConfigurationException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -128,7 +126,10 @@ class PodigeeRenderer implements FileRendererInterface
      */
     protected function renderIframe(string $videoId): string
     {
-        return '<iframe src="' . $videoId . '/embed?context=website" style="border: 0" border="0" height="100" width="100%"></iframe>';
+        $iframe = '<iframe src="' . $videoId . '/embed?context=website" style="border: 0" border="0" height="100"';
+        $iframe .= ' width="100%"></iframe>';
+
+        return $iframe;
     }
 
     /**
@@ -137,7 +138,11 @@ class PodigeeRenderer implements FileRendererInterface
      */
     protected function renderJavaScript(string $videoId): string
     {
-        return '<script class="podigee-podcast-player" src="https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js" data-configuration="' . $videoId . '/embed?context=external"></script>';
+        $javascript = '<script class="podigee-podcast-player" src="';
+        $javascript .= 'https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js"';
+        $javascript .= 'data-configuration="' . $videoId . '/embed?context=external"></script>';
+
+        return $javascript;
     }
 
     /**

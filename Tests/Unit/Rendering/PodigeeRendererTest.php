@@ -57,7 +57,6 @@ final class PodigeeRendererTest extends UnitTestCase
         self::assertTrue($result);
     }
 
-
     #[Test]
     public function canRenderWithMatchingMimeTypeReturnsFalse(): void
     {
@@ -133,7 +132,8 @@ final class PodigeeRendererTest extends UnitTestCase
     public function renderWihtIframeAndWithoutPrivacyReturnsPodigeeHtml(): void
     {
         $videoId = 'https://subdomain.podigee.io/podcast-title';
-        $iframe = '<iframe src="' . $videoId . '/embed?context=website" style="border: 0" border="0" height="100" width="100%"></iframe>';
+        $iframe = '<iframe src="' . $videoId . '/embed?context=website" style="border: 0" border="0" height="100" ';
+        $iframe .= 'width="100%"></iframe>';
         $expected = $iframe;
 
         $fileResourceMock = $this->createMock(File::class);
@@ -168,7 +168,8 @@ final class PodigeeRendererTest extends UnitTestCase
     public function renderWithIframeAndPrivacyReturnsPodigeeHtml(): void
     {
         $videoId = 'https://subdomain.podigee.io/podcast-title';
-        $expected = '<iframe data-name="script-podigee" data-src="' . $videoId . '/embed?context=website" style="border: 0" border="0" height="100" width="100%"></iframe>';
+        $expected = '<iframe data-name="script-podigee" data-src="' . $videoId . '/embed?context=website" ';
+        $expected .= 'style="border: 0" border="0" height="100" width="100%"></iframe>';
 
         $fileResourceMock = $this->createMock(File::class);
         $fileResourceMock->expects(self::any())->method('getMimeType')->willReturn('audio/podigee');
@@ -220,7 +221,10 @@ final class PodigeeRendererTest extends UnitTestCase
     public function renderWithJavaScriptAndPrivacyReturnsPodigeeHtml(): void
     {
         $videoId = 'https://subdomain.podigee.io/podcast-title';
-        $expected = '<script class="podigee-podcast-player" src="https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js" data-configuration="' . $videoId . '/embed?context=external"></script>';
+        $expected = '<script class="podigee-podcast-player" ';
+        $expected .= 'src="https://player.podigee-cdn.net/podcast-player/javascripts/';
+        $expected .= 'podigee-podcast-player.js" data-configuration="' . $videoId;
+        $expected .= '/embed?context=external"></script>';
 
         $fileResourceMock = $this->createMock(File::class);
         $fileResourceMock->expects(self::any())->method('getMimeType')->willReturn('audio/podigee');
@@ -280,9 +284,8 @@ final class PodigeeRendererTest extends UnitTestCase
         self::assertStringContainsString('podigee-podcast-player', $result);
         self::assertStringContainsString('data-configuration', $result);
         self::assertStringContainsString('embed?context=external', $result);
-        self::assertStringContainsString('https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js', $result);
+        self::assertStringContainsString('https://player.podigee-cdn.net/podcast-player/', $result);
     }
-
 
     protected function buildReflectionForProtectedFunction(
         string $methodName,

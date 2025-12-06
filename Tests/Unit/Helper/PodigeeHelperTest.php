@@ -46,7 +46,7 @@ final class PodigeeHelperTest extends UnitTestCase
             'width' => 150,
             'height' => 150,
             'title' => 'Sample Title',
-            'podigee_thumbnail' => 'https://podigee.com/thumbnail.jpg'
+            'podigee_thumbnail' => 'https://podigee.com/thumbnail.jpg',
         ];
 
         // Mocking the getOnlineMediaId() and getOEmbedData() methods
@@ -60,9 +60,8 @@ final class PodigeeHelperTest extends UnitTestCase
             ->with('123456')
             ->willReturn([
                 'title' => 'Sample Title',
-                'thumbnail_url' => 'https://podigee.com/thumbnail.jpg'
+                'thumbnail_url' => 'https://podigee.com/thumbnail.jpg',
             ]);
-
 
         $metaData = $podigeeHelper->getMetaData($fileMock);
 
