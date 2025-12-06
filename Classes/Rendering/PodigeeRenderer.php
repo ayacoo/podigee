@@ -140,7 +140,7 @@ class PodigeeRenderer implements FileRendererInterface
     {
         $javascript = '<script class="podigee-podcast-player" src="';
         $javascript .= 'https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js"';
-        $javascript .= 'data-configuration="' . $videoId . '/embed?context=external"></script>';
+        $javascript .= ' data-configuration="' . $videoId . '/embed?context=external"></script>';
 
         return $javascript;
     }
