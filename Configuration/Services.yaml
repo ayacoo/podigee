@@ -1,0 +1,18 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Ayacoo\Podigee\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+      - '../Classes/Helper/*'
+
+  Ayacoo\Podigee\Command\UpdateMetadataCommand:
+    tags:
+      - name: 'console.command'
+        command: 'podigee:updateMetadata'
+        description: 'Updates the Podigee metadata'
+        schedulable: true

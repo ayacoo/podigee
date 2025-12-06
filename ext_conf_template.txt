@@ -1,0 +1,2 @@
+# cat=Settings/O; type=options[javascript,iframe]; label= Podigee Display Type
+display = javascript

@@ -1,0 +1,6 @@
+plugin.tx_podigee {
+    settings {
+        # cat=plugin.tx_podigee//a; type=boolean; label=Privacy (Use data-src instead of src)
+        privacy = 0
+    }
+}
