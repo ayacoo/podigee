@@ -11,12 +11,10 @@ defined('TYPO3') or die();
 (function ($mediaFileExt) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'][$mediaFileExt] = PodigeeHelper::class;
 
-    $rendererRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(RendererRegistry::class);
+    $rendererRegistry = GeneralUtility::makeInstance(RendererRegistry::class);
     $rendererRegistry->registerRendererClass(PodigeeRenderer::class);
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['FileInfo']['fileExtensionToMimeType'][$mediaFileExt] = 'audio/' . $mediaFileExt;
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext'] .= ',' . $mediaFileExt;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['FileInfo']['mimeTypeCompatibility']['text/plain']['podigee'] = 'audio/podigee';
 
-    $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
-    $iconRegistry->registerFileExtension($mediaFileExt, 'mimetypes-media-image-' . $mediaFileExt);
 })('podigee');

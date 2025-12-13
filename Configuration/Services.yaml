@@ -16,3 +16,9 @@ services:
         command: 'podigee:updateMetadata'
         description: 'Updates the Podigee metadata'
         schedulable: true
+
+  Ayacoo\Podigee\EventListener\ModifyIconForResourcePropertiesListener:
+    tags:
+      - name: 'event.listener'
+        identifier: 'podigee/modify-icon-for-resource'
+        event: 'TYPO3\CMS\Core\Imaging\Event\ModifyIconForResourcePropertiesEvent'

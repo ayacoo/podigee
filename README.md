@@ -70,13 +70,9 @@ class PodigeeOutputEventListener
 In the backend, the preview is used by TextMediaRenderer. For online media, this
 only displays the provider's icon, in this case podigee. If you want to display
 the thumbnail, for example, you need your own renderer that overwrites
-Textmedia. An example renderer is available in the project. Caution: This
-overwrites all text media elements, so only use this renderer as a basis.
+Textmedia. 
 
-You register a renderer in the TCA `Configuration/TCA/Overrides/tt_content.php`
-with `$GLOBALS['TCA']['tt_content']['types']['textmedia']['previewRenderer'] = \Ayacoo\Podigee\Rendering\PodigeePreviewRenderer::class;`
-
-Documentation: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentElements/CustomBackendPreview.html
+TODO Event example
 
 ### 3.3 Content security policy
 
@@ -95,6 +91,7 @@ https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentS
 
 | Podigee | TYPO3 | PHP       | Support / Development                |
 |---------|-------|-----------|--------------------------------------|
+| 2.x     | 14.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 | 1.x     | 13.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 
 ### 4.2 Release Management
