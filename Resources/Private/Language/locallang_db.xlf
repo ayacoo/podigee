@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2">
+  <file source-language="en" datatype="plaintext" original="EXT:podigee/Resources/Private/Language/locallang_db.xlf" product-name="podigee">
+    <body>
+      <trans-unit id="tab.podigee">
+        <source>Podigee</source>
+      </trans-unit>
+      <trans-unit id="sys_file_metadata.podigee_thumbnail">
+        <source>Podigee thumbnail URL</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
