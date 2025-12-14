@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ayacoo\Podigee\EventListener;
 
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Imaging\Event\ModifyIconForResourcePropertiesEvent;
 use TYPO3\CMS\Core\Resource\File;
 
@@ -12,6 +13,7 @@ use TYPO3\CMS\Core\Resource\File;
  */
 final class ModifyIconForResourcePropertiesListener
 {
+    #[AsEventListener(identifier: 'podigee/modify-icon-for-resource')]
     public function __invoke(ModifyIconForResourcePropertiesEvent $event): void
     {
         $resource = $event->getResource();
