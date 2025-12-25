@@ -67,12 +67,11 @@ class PodigeeOutputEventListener
 
 ### 3.2 Backend Preview
 
-In the backend, the preview is used by TextMediaRenderer. For online media, this
-only displays the provider's icon, in this case podigee. If you want to display
-the thumbnail, for example, you need your own renderer that overwrites
-Textmedia. 
+In the backend, TextMedia displays the title of the element and the preview image of the podcast.
 
-TODO Event example
+If you want to influence this, you can activate an EventListener here. The project contains a file called 
+TextMediaPodigeePreviewEventListener.php.example. This can serve as a guide if you want to control 
+more content yourself.
 
 ### 3.3 Content security policy
 
