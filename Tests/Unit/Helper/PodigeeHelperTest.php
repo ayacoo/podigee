@@ -7,7 +7,6 @@ namespace Ayacoo\Podigee\Tests\Unit\Helper;
 use Ayacoo\Podigee\Helper\PodigeeHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOEmbedHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -37,14 +36,9 @@ final class PodigeeHelperTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
-        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfigurationMock);
-        $expectedConfiguration = ['width' => 150, 'height' => 150];
-        $extensionConfigurationMock->method('get')->with('podigee')->willReturn($expectedConfiguration);
-
         $expectedMetaData = [
-            'width' => 150,
-            'height' => 150,
+            'width' => 800,
+            'height' => 450,
             'title' => 'Sample Title',
             'podigee_thumbnail' => 'https://podigee.com/thumbnail.jpg',
         ];
@@ -74,11 +68,6 @@ final class PodigeeHelperTest extends UnitTestCase
         $fileMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
-        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfigurationMock);
-        $expectedConfiguration = ['width' => 150, 'height' => 150];
-        $extensionConfigurationMock->method('get')->with('podigee')->willReturn($expectedConfiguration);
 
         // Mocking the getOnlineMediaId() and getOEmbedData() methods
         $podigeeHelper = $this->getMockBuilder(PodigeeHelper::class)

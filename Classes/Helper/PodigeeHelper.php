@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Ayacoo\Podigee\Helper;
 
 use GuzzleHttp\Exception\GuzzleException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Resource\File;
@@ -72,8 +70,6 @@ class PodigeeHelper extends AbstractOEmbedHelper
      *
      * @param File $file
      * @return array with metadata
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function getMetaData(File $file): array
     {

@@ -35,7 +35,8 @@ class PodigeePreviewRenderer extends StandardContentPreviewRenderer
                 }
                 $fileObject = $fileReferenceObject->getOriginalFile();
                 if (!$fileObject->isMissing()) {
-                    $content .= '<a href="' . htmlspecialchars((string)$fileObject->getPublicUrl()) . '" target="_blank">';
+                    $content .= '<a href="' . htmlspecialchars((string)$fileObject->getPublicUrl());
+                    $content .= '" target="_blank">';
                     $content .= htmlspecialchars($fileObject->getProperty('title'));
 
                     // use latest processed file (64px)

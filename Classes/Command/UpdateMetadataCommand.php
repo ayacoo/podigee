@@ -78,7 +78,8 @@ class UpdateMetadataCommand extends Command
         }
 
         $videoId = $onlineMediaHelper->getOnlineMediaId($file);
-        $temporaryFileName = $onlineMediaHelper->getTempFolderPath() . $file->getExtension() . '_' . md5($videoId) . '.jpg';
+        $temporaryFileName = $onlineMediaHelper->getTempFolderPath() . $file->getExtension() . '_' ;
+        $temporaryFileName .= md5($videoId) . '.jpg';
         if (file_exists($temporaryFileName)) {
             unlink($temporaryFileName);
         }
