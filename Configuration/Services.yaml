@@ -2,15 +2,24 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: true
 
   Ayacoo\Podigee\:
     resource: '../Classes/*'
     exclude:
       - '../Classes/Domain/Model/*'
-      - '../Classes/Helper/*'
+
+  Ayacoo\Podigee\Helper\PodigeeHelper:
+    arguments:
+      $extension: 'podigee'
+
+  Ayacoo\Podigee\Rendering\PodigeeRenderer:
+    public: true
+
+  Ayacoo\Podigee\Rendering\PodigeePreviewRenderer:
+    public: true
 
   Ayacoo\Podigee\Command\UpdateMetadataCommand:
+    public: true
     tags:
       - name: 'console.command'
         command: 'podigee:updateMetadata'

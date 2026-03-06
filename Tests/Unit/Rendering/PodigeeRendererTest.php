@@ -58,7 +58,7 @@ final class PodigeeRendererTest extends UnitTestCase
     }
 
     #[Test]
-    public function canRenderWithMatchingMimeTypeReturnsFalse(): void
+    public function canRenderReturnsFalseWhenOnlineMediaHelperNotRegistered(): void
     {
         $fileResourceMock = $this->createMock(File::class);
         $fileResourceMock->expects(self::any())->method('getMimeType')->willReturn('audio/podigee');

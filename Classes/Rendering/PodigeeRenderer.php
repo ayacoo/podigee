@@ -64,7 +64,7 @@ class PodigeeRenderer implements FileRendererInterface
         $videoId = $this->getVideoIdFromFile($file);
 
         $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('podigee');
-        if ($extConf['display'] === 'iframe') {
+        if (($extConf['display'] ?? '') === 'iframe') {
             $output = $this->renderIframe($videoId);
             if ($this->getPrivacySetting()) {
                 $output = str_replace('src', 'data-name="script-podigee" data-src', $output);
@@ -156,7 +156,7 @@ class PodigeeRenderer implements FileRendererInterface
         );
         $extSettings = $extbaseFrameworkConfiguration['plugin.']['tx_podigee.']['settings.'] ?? null;
         if (is_array($extSettings)) {
-            $privacy = (bool)$extSettings['privacy'] ?? false;
+            $privacy = (bool)($extSettings['privacy'] ?? false);
         }
         return $privacy;
     }

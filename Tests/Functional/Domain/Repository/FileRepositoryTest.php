@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ayacoo\Podigee\Tests\Functional\Domain\Repository;
 
 use Ayacoo\Podigee\Domain\Repository\FileRepository;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class FileRepositoryTest extends FunctionalTestCase
@@ -20,9 +21,7 @@ final class FileRepositoryTest extends FunctionalTestCase
         $this->subject = $this->get(FileRepository::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getVideosByFileExtensionForNoRecordsReturnsEmptyResult(): void
     {
         $result = $this->subject->getVideosByFileExtension('jpg', 10);
@@ -30,9 +29,7 @@ final class FileRepositoryTest extends FunctionalTestCase
         self::assertCount(0, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getVideosByFileExtensionReturnsSoundcloudMedia(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/Basic.csv');
@@ -42,9 +39,7 @@ final class FileRepositoryTest extends FunctionalTestCase
         self::assertSame(1, $row[0]['uid']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getVideosByFileExtensionWithMaxResultsReturnsSoundcloudMedia(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/MaxResults.csv');
@@ -53,9 +48,7 @@ final class FileRepositoryTest extends FunctionalTestCase
         self::assertCount(1, $row);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getVideosByFileExtensionIgnoresMissingMedia(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/MissingPodigee.csv');

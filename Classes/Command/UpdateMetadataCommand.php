@@ -11,13 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
-use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOnlineMediaHelper;
 use TYPO3\CMS\Core\Resource\ProcessedFileRepository;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class UpdateMetadataCommand extends Command
 {
@@ -37,7 +34,8 @@ class UpdateMetadataCommand extends Command
         protected FileRepository $fileRepository,
         protected MetaDataRepository $metadataRepository,
         protected ResourceFactory $resourceFactory,
-        protected ProcessedFileRepository $processedFileRepository
+        protected ProcessedFileRepository $processedFileRepository,
+        protected PodigeeHelper $podigeeHelper
     ) {
         parent::__construct();
     }
@@ -47,12 +45,10 @@ class UpdateMetadataCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $limit = (int)($input->getOption('limit') ?? 10);
 
-        $podigeeHelper = GeneralUtility::makeInstance(PodigeeHelper::class, 'podigee');
-
         $videos = $this->fileRepository->getVideosByFileExtension('podigee', $limit);
         foreach ($videos as $video) {
             $file = $this->resourceFactory->getFileObject($video['uid']);
-            $metaData = $podigeeHelper->getMetaData($file);
+            $metaData = $this->podigeeHelper->getMetaData($file);
             if (!empty($metaData)) {
                 $newMetaData = [
                     'width' => (int)$metaData['width'],
@@ -66,7 +62,7 @@ class UpdateMetadataCommand extends Command
                     $newMetaData['author'] = $metaData['author'];
                 }
                 $this->metadataRepository->update($file->getUid(), $newMetaData);
-                $this->handlePreviewImage($podigeeHelper, $file);
+                $this->handlePreviewImage($this->podigeeHelper, $file);
                 $io->success($file->getProperty('title') . '(UID: ' . $file->getUid() . ') was processed');
             }
         }
@@ -74,7 +70,7 @@ class UpdateMetadataCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function handlePreviewImage(AbstractOnlineMediaHelper $onlineMediaHelper, File $file): void
+    protected function handlePreviewImage(PodigeeHelper $onlineMediaHelper, File $file): void
     {
         $processedFiles = $this->processedFileRepository->findAllByOriginalFile($file);
         foreach ($processedFiles as $processedFile) {
@@ -82,19 +78,10 @@ class UpdateMetadataCommand extends Command
         }
 
         $videoId = $onlineMediaHelper->getOnlineMediaId($file);
-        $temporaryFileName = $this->getTempFolderPath() . $file->getExtension() . '_' . md5($videoId) . '.jpg';
+        $temporaryFileName = $onlineMediaHelper->getTempFolderPath() . $file->getExtension() . '_' . md5($videoId) . '.jpg';
         if (file_exists($temporaryFileName)) {
             unlink($temporaryFileName);
         }
         $onlineMediaHelper->getPreviewImage($file);
-    }
-
-    protected function getTempFolderPath(): string
-    {
-        $path = Environment::getPublicPath() . '/typo3temp/assets/online_media/';
-        if (!is_dir($path)) {
-            GeneralUtility::mkdir_deep($path);
-        }
-        return $path;
     }
 }

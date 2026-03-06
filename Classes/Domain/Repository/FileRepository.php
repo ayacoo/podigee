@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ayacoo\Podigee\Domain\Repository;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
 use Doctrine\DBAL\Platforms\MariaDBPlatform as DoctrineMariaDBPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform as DoctrineMySQLPlatform;
@@ -19,7 +18,7 @@ class FileRepository
 {
     private const SYS_FILE_TABLE = 'sys_file';
 
-    private ?AbstractPlatform $platform;
+    private ?DoctrineAbstractPlatform $platform = null;
 
     public function getVideosByFileExtension(string $extension, int $limit = 0): array
     {
@@ -73,7 +72,7 @@ class FileRepository
         if ($platform instanceof DoctrineMySQLPlatform) {
             return 'mysql';
         }
-        if ($platform instanceof DoctrinePostgreSqlPlatform) {
+        if ($platform instanceof DoctrinePostgreSQLPlatform) {
             return 'postgresql';
         }
         if ($platform instanceof DoctrineSQLitePlatform) {

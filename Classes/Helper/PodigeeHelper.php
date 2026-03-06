@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Ayacoo\Podigee\Helper;
 
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
@@ -24,30 +24,21 @@ class PodigeeHelper extends AbstractOEmbedHelper
      *
      * @param string $mediaId
      * @return array|null
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     protected function getOEmbedData($mediaId)
     {
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('podigee');
-        $token = $extConf['token'] ?? '';
-        $clientId = $extConf['clientId'] ?? '';
-
         $oEmbedUrl = $this->getOEmbedUrl($mediaId);
         $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $additionalOptions = [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-                'Client-Id' => $clientId,
-            ],
-        ];
         try {
-            $response = $requestFactory->request($oEmbedUrl, 'GET', $additionalOptions);
+            $response = $requestFactory->request($oEmbedUrl);
             if ($response->getStatusCode() === 200) {
-                return json_decode($response->getBody()->getContents(), true);
+                $data = json_decode($response->getBody()->getContents(), true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    return $data;
+                }
             }
             return [];
-        } catch (ClientException $e) {
+        } catch (GuzzleException $e) {
             return [];
         }
     }
@@ -86,14 +77,11 @@ class PodigeeHelper extends AbstractOEmbedHelper
      */
     public function getMetaData(File $file): array
     {
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('podigee');
-
         $metaData = [];
-
         $oEmbed = $this->getOEmbedData($this->getOnlineMediaId($file));
         if ($oEmbed) {
-            $metaData['width'] = $extConf['width'] ?? 800;
-            $metaData['height'] = $extConf['height'] ?? 450;
+            $metaData['width'] = 800;
+            $metaData['height'] = 450;
             $metaData['title'] = $oEmbed['title'] ?? '';
             $thumbnailUrl = $oEmbed['thumbnail_url'] ?? '';
             $thumbnailUrl = str_replace('%{width}', (string)$metaData['width'], $thumbnailUrl);
@@ -121,12 +109,23 @@ class PodigeeHelper extends AbstractOEmbedHelper
 
         if (!empty($previewImageUrl)) {
             $previewImage = GeneralUtility::getUrl($previewImageUrl);
-            file_put_contents($temporaryFileName, $previewImage);
-            GeneralUtility::fixPermissions($temporaryFileName);
-            return $temporaryFileName;
+            if ($previewImage !== false && $previewImage !== '') {
+                file_put_contents($temporaryFileName, $previewImage);
+                GeneralUtility::fixPermissions($temporaryFileName);
+                return $temporaryFileName;
+            }
         }
 
         return '';
+    }
+
+    public function getTempFolderPath(): string
+    {
+        $path = Environment::getPublicPath() . '/typo3temp/assets/online_media/';
+        if (!is_dir($path)) {
+            GeneralUtility::mkdir_deep($path);
+        }
+        return $path;
     }
 
     protected function getVideoId(string $url): ?string
