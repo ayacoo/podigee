@@ -69,17 +69,13 @@ class PodigeeOutputEventListener
 
 In the backend, TextMedia displays the title of the element and the preview image of the podcast.
 
-If you want to influence this, you can activate an EventListener here. The project contains a file called 
-TextMediaPodigeePreviewEventListener.php.example. This can serve as a guide if you want to control 
+If you want to influence this, you can activate an EventListener here. The project contains a file called
+TextMediaPodigeePreviewEventListener.php.example. This can serve as a guide if you want to control
 more content yourself.
 
 ### 3.3 Content security policy
 
-If CSP is activated in the backend, policies will be automatically added.
-To do this, the file Configuration/ContentSecurityPolicies.php is used.
-
-If CSP is to be extended for the frontend, the configuration can be added
-in a site package extension or in the global csp.yml
+By default, CSP settings are added for the frontend and backend. These settings can be modified via YAML or events.
 
 Take a look at the current documentation:
 https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentSecurityPolicy/Index.html
