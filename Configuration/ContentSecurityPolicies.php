@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Security\ContentSecurityPolicy\SourceScheme;
 use TYPO3\CMS\Core\Security\ContentSecurityPolicy\UriValue;
 use TYPO3\CMS\Core\Type\Map;
 
-$mutationCollection =  new MutationCollection(
+$mutationCollection = new MutationCollection(
     // The csp extension is required for images in the PreviewRenderer when active
     new Mutation(
         MutationMode::Extend,

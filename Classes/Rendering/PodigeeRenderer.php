@@ -140,11 +140,13 @@ class PodigeeRenderer implements FileRendererInterface
     protected function renderJavaScript(string $videoId): string
     {
         $nonce = '';
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        /** @var ConsumableString|null $nonce */
-        $nonceAttribute = $request->getAttribute('nonce');
-        if ($nonceAttribute instanceof ConsumableString) {
-            $nonce = $nonceAttribute->consume();
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if ($request !== null) {
+            /** @var ConsumableString|null $nonce */
+            $nonceAttribute = $request->getAttribute('nonce');
+            if ($nonceAttribute instanceof ConsumableString) {
+                $nonce = $nonceAttribute->consume();
+            }
         }
 
         $javascript = '<script class="podigee-podcast-player" nonce="' . $nonce . '" src="';
