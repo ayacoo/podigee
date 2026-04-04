@@ -221,7 +221,7 @@ final class PodigeeRendererTest extends UnitTestCase
     public function renderWithJavaScriptAndPrivacyReturnsPodigeeHtml(): void
     {
         $videoId = 'https://subdomain.podigee.io/podcast-title';
-        $expected = '<script class="podigee-podcast-player" nonce=""';
+        $expected = '<script class="podigee-podcast-player" nonce="" ';
         $expected .= 'src="https://player.podigee-cdn.net/podcast-player/javascripts/';
         $expected .= 'podigee-podcast-player.js" data-configuration="' . $videoId;
         $expected .= '/embed?context=external"></script>';
