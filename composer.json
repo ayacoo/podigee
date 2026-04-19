@@ -2,7 +2,7 @@
 	"name": "ayacoo/podigee",
 	"version": "2.0.0",
 	"type": "typo3-cms-extension",
-	"description": "Provides a podigee online media helper",
+	"description": "Podigee - Provides a podigee online media helper",
 	"homepage": "https://www.ayacoo.de",
 	"authors": [
 		{
