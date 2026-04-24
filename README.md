@@ -67,24 +67,15 @@ class PodigeeOutputEventListener
 
 ### 3.2 Backend Preview
 
-In the backend, the preview is used by TextMediaRenderer. For online media, this
-only displays the provider's icon, in this case podigee. If you want to display
-the thumbnail, for example, you need your own renderer that overwrites
-Textmedia. An example renderer is available in the project. Caution: This
-overwrites all text media elements, so only use this renderer as a basis.
+In the backend, TextMedia displays the title of the element and the preview image of the podcast.
 
-You register a renderer in the TCA `Configuration/TCA/Overrides/tt_content.php`
-with `$GLOBALS['TCA']['tt_content']['types']['textmedia']['previewRenderer'] = \Ayacoo\Podigee\Rendering\PodigeePreviewRenderer::class;`
-
-Documentation: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentElements/CustomBackendPreview.html
+If you want to influence this, you can activate an EventListener here. The project contains a file called
+TextMediaPodigeePreviewEventListener.php.example. This can serve as a guide if you want to control
+more content yourself.
 
 ### 3.3 Content security policy
 
-If CSP is activated in the backend, policies will be automatically added.
-To do this, the file Configuration/ContentSecurityPolicies.php is used.
-
-If CSP is to be extended for the frontend, the configuration can be added
-in a site package extension or in the global csp.yml
+By default, CSP settings are added for the frontend and backend. These settings can be modified via YAML or events.
 
 Take a look at the current documentation:
 https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentSecurityPolicy/Index.html
@@ -95,6 +86,7 @@ https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentS
 
 | Podigee | TYPO3 | PHP       | Support / Development                |
 |---------|-------|-----------|--------------------------------------|
+| 2.x     | 14.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 | 1.x     | 13.x  | 8.2 - 8.5 | features, bugfixes, security updates |
 
 ### 4.2 Release Management

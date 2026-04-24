@@ -7,6 +7,7 @@ namespace Ayacoo\Podigee\Rendering;
 use Ayacoo\Podigee\Event\ModifyPodigeeOutputEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Domain\ConsumableString;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -138,7 +139,17 @@ class PodigeeRenderer implements FileRendererInterface
      */
     protected function renderJavaScript(string $videoId): string
     {
-        $javascript = '<script class="podigee-podcast-player" src="';
+        $nonce = '';
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if ($request !== null) {
+            /** @var ConsumableString|null $nonce */
+            $nonceAttribute = $request->getAttribute('nonce');
+            if ($nonceAttribute instanceof ConsumableString) {
+                $nonce = $nonceAttribute->consume();
+            }
+        }
+
+        $javascript = '<script class="podigee-podcast-player" nonce="' . $nonce . '" src="';
         $javascript .= 'https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js"';
         $javascript .= ' data-configuration="' . $videoId . '/embed?context=external"></script>';
 

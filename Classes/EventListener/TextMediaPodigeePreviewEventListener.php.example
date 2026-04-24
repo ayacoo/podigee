@@ -1,0 +1,98 @@
+<?php
+
+
+declare(strict_types=1);
+
+namespace Ayacoo\Podigee\EventListener;
+
+use TYPO3\CMS\Backend\View\Event\PageContentPreviewRenderingEvent;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
+use TYPO3\CMS\Core\Domain\Record;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
+
+#[AsEventListener(
+    identifier: 'ayacoo/podigee/textmedia-podigee-preview',
+)]
+final class TextMediaPodigeePreviewEventListener
+{
+    public function __invoke(PageContentPreviewRenderingEvent $event): void
+    {
+        if ($event->getTable() !== 'tt_content' || $event->getRecordType() !== 'textmedia') {
+            return;
+        }
+
+        /** @var Record $record */
+        $record = $event->getRecord();
+        $contentUid = $record->getUid();
+        if ($contentUid <= 0) {
+            return;
+        }
+
+        /** @var FileRepository $fileRepository */
+        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+        $references = $fileRepository->findByRelation('tt_content', 'assets', $contentUid);
+        if ($references === []) {
+            return;
+        }
+
+        $previewTitle = null;
+        $previewImgSrc = null;
+        $publicUrl = null;
+
+        foreach ($references as $reference) {
+            $file = $reference->getOriginalFile();
+            if (strtolower($file->getExtension()) !== 'podigee') {
+                continue;
+            }
+            $previewTitle = (string)($file->getProperty('title') ?: $file->getNameWithoutExtension());
+            $publicUrl = $file->getPublicUrl() ?? '';
+            if ($publicUrl === '') {
+                $publicUrl = null;
+            }
+            $previewImgSrc = $file->getProperty('podigee_thumbnail');
+
+            break;
+        }
+
+        if ($previewTitle === null && $previewImgSrc === null) {
+            return;
+        }
+
+        // Build a small preview markup: title and image (if available)
+        $wrapper = new TagBuilder('div');
+        $wrapper->addAttribute('class', 'content-preview content-preview--podigee');
+
+        $innerHtml = '';
+
+        if ($previewTitle) {
+            $title = new TagBuilder('p');
+            $title->addAttribute('class', 'content-preview__title t3-page-ce-header-title');
+            $title->setContent(htmlspecialchars($previewTitle, ENT_QUOTES | ENT_SUBSTITUTE));
+            $innerHtml .= $title->render();
+        }
+
+        if ($previewImgSrc) {
+            $img = new TagBuilder('img');
+            $img->addAttribute('src', $previewImgSrc);
+            $img->addAttribute('alt', $previewTitle ?? '');
+            $img->addAttribute('style', 'width: 64px; height: auto; display: block;');
+
+            $imgHtml = $img->render();
+            if ($publicUrl) {
+                $a = new TagBuilder('a');
+                $a->addAttribute('href', $publicUrl);
+                $a->addAttribute('target', '_blank');
+                $a->addAttribute('rel', 'noopener noreferrer');
+                $a->setContent($imgHtml);
+                $innerHtml .= $a->render();
+            } else {
+                $innerHtml .= $imgHtml;
+            }
+        }
+
+        $wrapper->setContent($innerHtml);
+        $event->setPreviewContent($wrapper->render());
+    }
+}

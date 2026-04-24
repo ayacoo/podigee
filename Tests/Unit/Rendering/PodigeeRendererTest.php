@@ -221,7 +221,7 @@ final class PodigeeRendererTest extends UnitTestCase
     public function renderWithJavaScriptAndPrivacyReturnsPodigeeHtml(): void
     {
         $videoId = 'https://subdomain.podigee.io/podcast-title';
-        $expected = '<script class="podigee-podcast-player" ';
+        $expected = '<script class="podigee-podcast-player" nonce="" ';
         $expected .= 'src="https://player.podigee-cdn.net/podcast-player/javascripts/';
         $expected .= 'podigee-podcast-player.js" data-configuration="' . $videoId;
         $expected .= '/embed?context=external"></script>';
@@ -282,6 +282,7 @@ final class PodigeeRendererTest extends UnitTestCase
         $result = $this->buildReflectionForProtectedFunction($methodName, $params, $this->subject);
 
         self::assertStringContainsString('podigee-podcast-player', $result);
+        self::assertStringContainsString('nonce', $result);
         self::assertStringContainsString('data-configuration', $result);
         self::assertStringContainsString('embed?context=external', $result);
         self::assertStringContainsString('https://player.podigee-cdn.net/podcast-player/', $result);
